@@ -1,30 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 
 function Calculator() {
+  const [input, setInput] = useState("0");
+
+  const handleClick = (value) => {
+    if (value === "AC") {
+      setInput("0");
+    } else if (value === "DEL") {
+      setInput(input.slice(0, -1) || "0");
+    } else if (value === "=") {
+      try {
+        setInput(eval(input).toString());
+      } catch (error) {
+        setInput("Error");
+      }
+    } else if (input === "0" && value !== ".") {
+      setInput(value);
+    } else {
+      setInput(input + value);
+    }
+  };
+
   return (
     <div className="flex justify-center items-center h-screen bg-gray-900">
-      <div className="p-6 rounded-lg shadow-lg w-80 bg-gray-800">
+      <div className="p-5 rounded-lg shadow-lg  w-100 bg-gray-800">
         <input
           type="text"
-          value="0"
-          className="w-full mb-4 p-3 text-right text-xl bg-gray-700 text-white rounded"
-          readOnly
+          value={input}
+          className="w-full mb-9 p-5 text-right text-4xl bg-cyan-600 text-white rounded"
         />
-
-        
         <div className="grid grid-cols-4 gap-3">
-          {["AC", "DEL", "%", "/", "7", "8", "9", "*", "4", "5", "6", "-", "1", "2", "3", "+", "00", "0", ".", "="].map((button) => (
-           <button
-           key={button}
-           className={`p-4 rounded text-white font-bold text-xl hover:opacity-50
-             ${["AC", "DEL", "="].includes(button) ? "bg-red-500" : ""}
-             ${["+", "-", "*", "/", "%"].includes(button) ? "bg-orange-500" : ""}
-             ${!["AC", "DEL", "=", "+", "-", "*", "/", "%"].includes(button) ? "bg-gray-500" : ""}
-           `}
-         >
-           {button}
-         </button>
-         
+          {["AC","DEL","%","/","7","8","9","*","4","5","6","-","1","2","3","+","00","0",".","=",
+          ].map((button) => (
+            <button
+              key={button}
+              onClick={() => handleClick(button)}
+              className={`w-16 h-16 flex items-center justify-center rounded-full text-white font-bold text-2xl hover:opacity-50              
+                ${["+", "-", "*", "/", "%", "=","AC", "DEL"].includes(button) ? "bg-purple-400" : ""}
+                ${!["AC", "DEL", "=", "+", "-", "*", "/", "%"].includes(button) ? "bg-rose-400" : ""}
+              `}
+            >
+              {button}
+            </button>
           ))}
         </div>
       </div>
